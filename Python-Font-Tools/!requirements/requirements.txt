@@ -1,0 +1,5 @@
+fonttools 
+tinker
+customtkinter
+tkinterdnd2 
+fonttools
