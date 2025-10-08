@@ -55,3 +55,9 @@ pip install -r !python-font-tools/!requirements/requirements.txt
 2. Select the fonts you want to uninstall
 3. Fonts will be removed from the system
 
+## 📚 Source & Credits
+
+The font installer/uninstaller tools (`0-font-install-uninstall-source.7z`) are based on [**FontRegister**](https://github.com/Nucs/FontRegister) by [@Nucs](https://github.com/Nucs).
+
+**FontRegister** is a C# library and utility for programmatically installing and uninstalling fonts on Windows.
+
