@@ -35,6 +35,10 @@ Located in `!python-font-tools/` directory:
 | `font_name_editor` | Edit font names programmatically |
 | `one_family_fonts_assembler` | Combine fonts into a single family |
 
+### Font Name Editor Preview
+
+![Font Name Editor](!python-font-tools/font_name_editor/Image.png)
+
 ### Requirements
 
 Install Python dependencies:
