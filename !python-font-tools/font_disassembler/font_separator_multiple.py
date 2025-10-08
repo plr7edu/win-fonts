@@ -254,12 +254,12 @@ def main():
     print("=" * 80)
     print()
     
-    # Check for !Source+Output directory
+    # Check for !source+output directory
     current_dir = Path.cwd()
-    source_output_dir = current_dir / "!Source+Output"
+    source_output_dir = current_dir / "!source+output"
     
     if not source_output_dir.exists():
-        print("ERROR: '!Source+Output' folder not found in the current directory.")
+        print("ERROR: '!source+output' folder not found in the current directory.")
         print(f"Current directory: {current_dir}")
         input("\nPress Enter to exit...")
         sys.exit(1)

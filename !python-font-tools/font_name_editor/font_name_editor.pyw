@@ -114,9 +114,9 @@ class CompactFontEditor(BaseWindow):
                     except Exception as e:
                         print(f"Taskbar icon error: {e}")
                 
-                print(f"Icon loaded: {icon_path}")
+                print(f"icon loaded: {icon_path}")
             else:
-                print(f"Icon not found at: {icon_path}")
+                print(f"icon not found at: {icon_path}")
         except Exception as e:
             print(f"Could not set icon: {e}")
     
@@ -131,21 +131,21 @@ class CompactFontEditor(BaseWindow):
             
             # Load icon with proper size
             # LR_LOADFROMFILE = 0x00000010
-            # IMAGE_ICON = 1
+            # IMAGE_icon = 1
             # LR_DEFAULTSIZE = 0x00000040
             hicon = ctypes.windll.user32.LoadImageW(
                 None, 
                 icon_path, 
-                1,  # IMAGE_ICON
+                1,  # IMAGE_icon
                 0,  # Use default size
                 0,  # Use default size
                 0x00000010 | 0x00000040  # LR_LOADFROMFILE | LR_DEFAULTSIZE
             )
             
             if hicon:
-                # WM_SETICON = 0x0080
-                # ICON_SMALL = 0
-                # ICON_BIG = 1
+                # WM_SETicon = 0x0080
+                # icon_SMALL = 0
+                # icon_BIG = 1
                 ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 0, hicon)  # Small icon
                 ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 1, hicon)  # Large icon
                 

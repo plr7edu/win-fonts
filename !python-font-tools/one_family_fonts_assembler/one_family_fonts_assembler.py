@@ -209,8 +209,8 @@ def main():
     try:
         # Define paths
         current_path = Path.cwd()
-        source_folder = current_path / "1_Source"
-        export_folder = current_path / "2_Export"
+        source_folder = current_path / "1_source"
+        export_folder = current_path / "2_export"
         
         # Validate folders
         if not source_folder.exists():
