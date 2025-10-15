@@ -78,6 +78,10 @@ class CompactFontEditor(BaseWindow):
         self.is_pinned = False
         
         self.setup_compact_ui()
+        
+        # Bind keyboard navigation
+        self.bind('<Up>', self.navigate_up)
+        self.bind('<Down>', self.navigate_down)
     
     def set_application_icon(self):
         """Set the window and taskbar icon"""
@@ -190,8 +194,6 @@ class CompactFontEditor(BaseWindow):
                 self.update()
         except Exception as e:
             print(f"Could not apply dark title bar: {e}")
-        
-        self.setup_compact_ui()
         
     def setup_compact_ui(self):
         # Main grid layout
@@ -469,12 +471,30 @@ class CompactFontEditor(BaseWindow):
                            text_color="#e0e0e0")
         btn.pack(fill="x", padx=2, pady=2)
         
+        # Store button reference for highlighting
+        font_info['button'] = btn
+        
     def select_font(self, index):
         if index >= len(self.font_files):
             return
+        
+        # Check for unsaved changes before switching
+        if self.current_font_index is not None and self.has_unsaved_changes():
+            response = messagebox.askyesnocancel(
+                "Unsaved Changes",
+                "You have unsaved changes. Do you want to save them before switching?"
+            )
+            if response is True:  # Yes - save changes
+                self.apply_changes()
+            elif response is None:  # Cancel - don't switch
+                return
+            # If No (False), continue without saving
             
         self.current_font_index = index
         font_info = self.font_files[index]
+        
+        # Update button highlights
+        self.update_font_highlights()
         
         try:
             if font_info['type'] == 'collection':
@@ -641,6 +661,68 @@ class CompactFontEditor(BaseWindow):
             self.pin_btn.configure(text="📍 Unpin", fg_color="#1f538d", hover_color="#14375e")
         else:
             self.pin_btn.configure(text="📌 Pin", fg_color="#2b2b2b", hover_color="#3d3d3d")
+    
+    def has_unsaved_changes(self):
+        """Check if current form has unsaved changes"""
+        if not self.current_font_data:
+            return False
+        
+        current_values = {
+            'family': self.family_name_entry.get().strip(),
+            'subfamily': self.subfamily_name_entry.get().strip(),
+            'full_name': self.full_name_entry.get().strip(),
+            'postscript': self.postscript_name_entry.get().strip(),
+            'version': self.version_entry.get().strip()
+        }
+        
+        return current_values != self.current_font_data
+    
+    def update_font_highlights(self):
+        """Update visual highlights for selected font"""
+        for i, font_info in enumerate(self.font_files):
+            if 'button' in font_info:
+                if i == self.current_font_index:
+                    # Highlight selected font with blue color
+                    font_info['button'].configure(
+                        fg_color="#1f538d",
+                        hover_color="#14375e",
+                        text_color="#ffffff"
+                    )
+                else:
+                    # Normal state
+                    font_info['button'].configure(
+                        fg_color="#2b2b2b",
+                        hover_color="#3d3d3d",
+                        text_color="#e0e0e0"
+                    )
+    
+    def navigate_up(self, event):
+        """Navigate to previous font with Up arrow key"""
+        if not self.font_files:
+            return
+        
+        if self.current_font_index is None:
+            # If nothing selected, select the last font
+            self.select_font(len(self.font_files) - 1)
+        elif self.current_font_index > 0:
+            # Move to previous font
+            self.select_font(self.current_font_index - 1)
+        
+        return "break"  # Prevent default behavior
+    
+    def navigate_down(self, event):
+        """Navigate to next font with Down arrow key"""
+        if not self.font_files:
+            return
+        
+        if self.current_font_index is None:
+            # If nothing selected, select the first font
+            self.select_font(0)
+        elif self.current_font_index < len(self.font_files) - 1:
+            # Move to next font
+            self.select_font(self.current_font_index + 1)
+        
+        return "break"  # Prevent default behavior
 
 if __name__ == "__main__":
     # Hide console window on Windows
